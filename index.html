@@ -1,94 +1,148 @@
-<html><head>
-<meta charset="utf-8">
+<html>
+	<head>
+		<meta charset="utf-8">
 
-<link href="static/css/common.css" rel="stylesheet" type="text/css">
+		<link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="static/css/common.css" rel="stylesheet" type="text/css">
 
-<script type="text/javascript" src="static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="static/js/vue.js"></script>
+		<script type="text/javascript" src="static/js/common.js"></script>
 
-<title>抽奖</title>
+		<title>抽奖</title>
 
-<style type="text/css">
+		<style type="text/css">
+			.clear{
+				clear:both;
+			}
+			.Title{
+				padding-top:50px;
+				padding-bottom:50px;
+			}
+			.index_left,.index_center,.index_right{
+				height:100%;
+				float:left;
+			}
+			.index_left{
+				width:25%;
+				padding-top:70px;
+			}
+			.index_left div{
+				width:100%;
+			}
+			.index_center{
+				width:50%;
+			}
+			.index_right{
+				width:25%;
+				padding-top:70px;
+			}
+			button.list-group-item{
+				margin-bottom: 10px;
+				width:80%;
+				margin-left:10%;
+				border-radius: 4px;
+				text-align:center;
+			}
+
+			.center_left,.center_right{
+				height:100%;
+				width:50%;
+				float:left;
+			}
+			.center_content img.center_top_img{
+				width:60%;
+				margin-left:20%;
+			}
+			.center_content img.center_bom_img{
+				width:44%;
+				margin-left:28%;
+			}
+		</style>
+	</head>
+
+	<body style="">
+
+		<div class="box" id="box">
+			<p class="Title">本抽奖活动由‘赤途冷链’赞助</p>
+
+			<div class="container-fluid">
+				<div class="index_left">
+					<div class="list-group">
+					  <button type="button" class="list-group-item level_list" v-for="item in list" @click="level_list">{{item.level_name}}</button>
+					</div>
+					
+				</div>
+
+				<div class="index_center">
+					<div class="center_content">
+						<div class="center_left">
+							<img src="static/img/user_ct.png" class="center_top_img">
+							<img src="static/img/user.jpg" class="center_bom_img">
+						</div>
+						<div class="center_right">
+							<img src="static/img/driver_ct.png" class="center_top_img">
+							<img src="static/img/driver.jpg" class="center_bom_img">
+						</div>
+						<div class="clear"></div>
+
+					</div>
+				</div>
+
+				<div class="index_right">
+					<div class="list-group">
+					  <button type="button" class="list-group-item win_list" v-for="item in list" @click="win_list">{{item.level_name}}</button>
+					</div>
+				</div>
+
+				<div class="clear"></div>
+
+			</div>
+			
+		</div>
+		
 	
-</style>
-</head>
-<body style="">
 
-<div class="box">
-	<p class="Title">中奖名单显示</p>
-	<ul class="prizeList">
-		<li data-id="10">1、<span>个双方各</span></li>
-		<li data-id="70">2、<span>是梵蒂冈</span></li>
-		<li data-id="31">3、<span>好的</span></li>
-		<li data-id="11">4、<span>张是梵蒂冈三</span></li>
-		<li data-id="43">5、<span>张三</span></li>
-		<li data-id="71">6、<span>撒旦法</span></li>
-		<li data-id="34">7、<span>刚刚</span></li>
-		<li data-id="18">8、<span>换个</span></li>
-		<li data-id="51">9、<span>阿斯蒂芬</span></li>
-		<li data-id="37">10、<span>风格的</span></li>
-</div>
-	<div class="submit" data-id="0">开始</div>
+
+	</body>
+</html>
 
 <script type="text/javascript">
-//从一个给定的数组arr中,随机返回num个不重复项
-		function getArrayItems(arr, num) {
-		    //新建一个数组,将传入的数组复制过来,用于运算,而不要直接操作传入的数组;
-		    var temp_array = new Array();
-		    for (var index in arr) {
-		        temp_array.push(arr[index]);
-		    }
-		    //取出的数值项,保存在此数组
-		    var return_array = new Array();
-		    for (var i = 0; i<num; i++) {
-		        //判断如果数组还有可以取出的元素,以防下标越界
-		        if (temp_array.length>0) {
-		            //在数组中产生一个随机索引
-		            var arrIndex = Math.floor(Math.random()*temp_array.length);
-		            //将此随机索引的对应的数组元素值复制出来
-		            return_array[i] = temp_array[arrIndex];
-		            //然后删掉此索引的数组元素,这时候temp_array变为新的数组
-		            temp_array.splice(arrIndex, 1);
-		        } else {
-		            //数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
-		            break;
-		        }
-		    }
-		    return return_array;
-		}
-	var interval;
-	$(".submit").click(function(){
-		var status = $(this).data("id");
-		var ints ;
-		if(status == 0){
-			$.get("data.json",{},function(data){
-				if(data){
-	      			if(data.code=="1"){
-	        			function times(){
-							var ArrList=data.data;
-							var res = getArrayItems(ArrList,10);
-							str='';
-							for(o in res){
-								num = parseInt(o)+1;
-								str+='<li data-id="'+res[o].id+'">'+num+'、<span>'+res[o].name+'</span></li>';
-							}
-							$(".prizeList").html(str);
-						}
-						interval = setInterval(times,0);
-						$(".submit").data("id","1");
-						$(".submit").text("停止");
-		            }
-		        }else{  
-		            alert('Ajax error!');
-		        }
-		    },'json');
-		}else{
-			clearInterval(interval);
-			$(".submit").data("id","0");
-			$(".submit").text("开始");
-		}
+	var vue = new Vue({
+	  el: '#box',
+	  data: {
+	    message: 'Hello Vue!',
+	    list:[]
+	  },
+	  methods:{
+	  	level_list(){
+	  		console.log(web_win);
+	  		window.location.href = web_win;
+	  	},
+	  	win_list(){
+	  		console.log(web_win_list);
+	  		window.location.href = web_win_list;
+	  	},
+	  }
 	})
 
+	var url = host+router.index;
+	$.get(url,function(result){
+
+		var data = JSON.parse(result).data;
+		vue.list = data;
+		console.log(vue.list);
+	});
+
+	$('.level_list').click(function(){
+		console.log(web_win);
+		window.location.href = web_win;
+	});
+
+	$('.win_list').click(function(){
+		console.log(web_win);
+		window.location.href = web_win_list;
+	});
+
 </script>
-
-
-</body></html>
