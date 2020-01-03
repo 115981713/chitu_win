@@ -94,6 +94,8 @@
 				$.get(url,function(result){
 					var data = JSON.parse(result);
 					vue.list = data.data;
+					console.log(vue.list.length);
+
 					console.log(vue.list);
 				});
 			}
@@ -140,10 +142,13 @@
 				var status = $(this).data("id");
 				var ints ;
 				if(status == 0){
+					if (vue.list.length == 0) {
+						layer.msg('没有抽奖人员！',{icon:2});
+						return false;
+					}
 
 					if (vue.level_list.type == 1) {
 						layer.msg('奖项已经结束抽取！',{icon:2});
-						// alert('奖项已经结束抽取！');
 						return false;
 					}
 					
