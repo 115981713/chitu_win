@@ -1,5 +1,5 @@
 // var host = 'http://tp5.com/api.php/chitu/';//测试
-var host = 'http://tp5.peipeiyu.com';//正式
+var host = 'http://tp5.peipeiyu.com/';//正式
 
 // var web_host = 'http://ct.win.com/';
 var web_host = 'http://chitu.topyun.com/';
