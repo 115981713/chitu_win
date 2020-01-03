@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="static/js/jquery.min.js"></script>
 		<script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="static/js/vue.js"></script>
+		<script type="text/javascript" src="static/layer/layer.js"></script>
 		<script type="text/javascript" src="static/js/common.js"></script>
 
 		<title>抽奖</title>
@@ -59,18 +60,26 @@
 				width:44%;
 				margin-left:28%;
 			}
+			.level_font{
+				font-weight:bold;
+				color:red;
+			}
 		</style>
 	</head>
 
 	<body style="">
 
 		<div class="box" id="box">
-			<p class="Title">本抽奖活动由‘赤途冷链’赞助</p>
+			<p class="Title">{{title}}</p>
 
 			<div class="container-fluid">
 				<div class="index_left">
 					<div class="list-group">
-					  <button type="button" class="list-group-item level_list" v-for="item in list" @click="level_list">{{item.level_name}}</button>
+					  	<button type="button" class="list-group-item level_list" v-for="item in list" @click="level_list(item.id)" :key="item.id">
+					  		<span class="level_font">{{item.level_name}}</span>
+						  	({{item.count}}/{{item.num}})
+					  		{{item.show_time}}
+						</button>
 					</div>
 					
 				</div>
@@ -92,40 +101,40 @@
 
 				<div class="index_right">
 					<div class="list-group">
-					  <button type="button" class="list-group-item win_list" v-for="item in list" @click="win_list">{{item.level_name}}</button>
+					  <button type="button" class="list-group-item win_list" v-for="item in list" @click="win_list(item.id)" :key="item.id">{{item.level_name}}</button>
 					</div>
 				</div>
-
 				<div class="clear"></div>
-
 			</div>
-			
 		</div>
-		
-	
-
-
 	</body>
 </html>
 
 <script type="text/javascript">
 	var vue = new Vue({
 	  el: '#box',
+	  mounted(){
+	  	is_login();
+	  },
 	  data: {
 	    message: 'Hello Vue!',
-	    list:[]
+	    list:[],
+	    title:'2020 新年快乐！'
 	  },
 	  methods:{
-	  	level_list(){
+	  	level_list(id){
 	  		console.log(web_win);
-	  		window.location.href = web_win;
+	  		window.location.href = web_win+'?id='+id;
 	  	},
-	  	win_list(){
+	  	win_list(id){
 	  		console.log(web_win_list);
-	  		window.location.href = web_win_list;
+	  		window.location.href = web_win_list+'?id='+id;
 	  	},
 	  }
 	})
+
+	var total = '<button type="button" class="list-group-item win_list_all" >中奖名单(全部)</button>';
+	$('.index_right .list-group').append(total);
 
 	var url = host+router.index;
 	$.get(url,function(result){
@@ -135,12 +144,17 @@
 		console.log(vue.list);
 	});
 
-	$('.level_list').click(function(){
-		console.log(web_win);
-		window.location.href = web_win;
-	});
+	// $('.level_list').click(function(){
+	// 	console.log(web_win);
+	// 	window.location.href = web_win;
+	// });
 
-	$('.win_list').click(function(){
+	// $('.win_list').click(function(){
+	// 	console.log(web_win);
+	// 	window.location.href = web_win_list;
+	// });	
+
+	$('.win_list_all').click(function(){
 		console.log(web_win);
 		window.location.href = web_win_list;
 	});

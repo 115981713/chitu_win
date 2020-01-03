@@ -1,89 +1,153 @@
-<html><head>
-<meta charset="utf-8">
-<link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="../static/css/common.css" rel="stylesheet" type="text/css">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../static/css/common.css" rel="stylesheet" type="text/css">
 
-<script type="text/javascript" src="../static/js/jquery.min.js"></script>
-<script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../static/js/vue.js"></script>
-<script type="text/javascript" src="../static/js/vue-resource.js"></script>
-<script type="text/javascript" src="../static/js/common.js"></script>
+		<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../static/js/vue.js"></script>
 
-<title>抽奖</title>
+		<script type="text/javascript" src="../static/layer/layer.js"></script>
+		<script type="text/javascript" src="../static/js/common.js"></script>
 
-<style type="text/css">
-	
-</style>
-</head>
-<body style="">
+		<title>抽奖</title>
 
-<div class="box" id="box">
-	<p class="Title">中奖名单显示</p>
-	<ul class="prizeList">
-		
-	</ul>
-</div>
-	<div class="submit" data-id="0">开始</div>
+		<style type="text/css">
+			.submit{
+				cursor:pointer;
+			}
+			.history{
+				margin-top:20px;
+				text-align:center;
+			}
+			.history button{
+				border-radius: 30px;
+			    width: 520px;
+			    height: 75px;
+			    font-size: 48px;
+    			font-weight: bold;
+    			line-height: 55px;
+			}
+			.flag_reset{
+				display:none;
+			}
+		</style>
+	</head>
+	<body style="" >
+		<span class="flag" >重新抽奖</span>
+		<div class="box" id="box">
+			<p class="Title">{{level_list.level_name}}({{level_list.num}}名)-中奖名单显示
+			</p>
+			<ul class="prizeList">
+				
+			</ul>
+		</div>
+		<div class="submit" data-id="0">开始</div>
 
-<script type="text/javascript">
-	
-	var vue = new Vue({
-	  el: '#box',
-	  mounted(){
-	  	
-	  },
-	  data: {
-	    message: 'Hello Vue!',
-	    list:[]
-	  },
-	  methods:{
-	  	
-	  }
-	});
+		<div class="history" >
+			<button type="button" class="btn btn-info btn-lg back_index">返回</button>
+		</div>
 
-	var url = host+router.noWinList;
-	$.get(url,function(result){
-		var data = JSON.parse(result);
-		vue.list = data.data;
-		console.log(vue.list);
-	});
-	
-//从一个给定的数组arr中,随机返回num个不重复项
-		function getArrayItems(arr, num) {
-		    //新建一个数组,将传入的数组复制过来,用于运算,而不要直接操作传入的数组;
-		    var temp_array = new Array();
-		    for (var index in arr) {
-		        temp_array.push(arr[index]);
-		    }
-		    //取出的数值项,保存在此数组
-		    var return_array = new Array();
-		    for (var i = 0; i<num; i++) {
-		        //判断如果数组还有可以取出的元素,以防下标越界
-		        if (temp_array.length>0) {
-		            //在数组中产生一个随机索引
-		            var arrIndex = Math.floor(Math.random()*temp_array.length);
-		            //将此随机索引的对应的数组元素值复制出来
-		            return_array[i] = temp_array[arrIndex];
-		            //然后删掉此索引的数组元素,这时候temp_array变为新的数组
-		            temp_array.splice(arrIndex, 1);
-		        } else {
-		            //数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
-		            break;
-		        }
-		    }
-		    return return_array;
-		}
-	var interval;
-	$(".submit").click(function(){
-		var status = $(this).data("id");
-		var ints ;
-		if(status == 0){
+		<div class="history flag_reset">
+			<button type="button" class="btn btn-info btn-lg reset_win">重新抽奖</button>
+		</div>
+
+		<script type="text/javascript">
 			
-	      			
-	        			function times(){
-							// var ArrList=data.data;
+			var vue = new Vue({
+			  el: '#box',
+			  created(){
+			  	this.id = GetQueryString('id');
+			  },
+			  mounted(){
+			  	is_login();
+			  },
+			  data: {
+			    message: 'Hello Vue!',
+			    flag:false,
+			    id:'',
+			    list:[],
+			    level_list:[],
+			    win_list:[]
+			  },
+			  methods:{
+			  	
+			  }
+			});
+
+			$('.flag').click(function(){
+				vue.flag = !vue.flag;
+				if (vue.flag) {
+			  		$('.flag_reset').css({"display":"block"});
+			  	} else {
+			  		$('.flag_reset').css({"display":"none"});
+			  	}
+			});
+
+			// 未抽奖人员
+			function user_list(){
+				var url = host+router.noWinList;
+				$.get(url,function(result){
+					var data = JSON.parse(result);
+					vue.list = data.data;
+					console.log(vue.list);
+				});
+			}
+
+			// 奖项详情
+			function level_detail(){
+				var url_detail = host+router.level_detail;
+				$.post(url_detail,{id:vue.id},function(result){
+					vue.level_list = result.data;
+				  	console.log(vue.level_list);
+				},'json');
+			}
+			user_list();
+			level_detail();
+
+			
+		//从一个给定的数组arr中,随机返回num个不重复项
+				function getArrayItems(arr, num) {
+				    //新建一个数组,将传入的数组复制过来,用于运算,而不要直接操作传入的数组;
+				    var temp_array = new Array();
+				    for (var index in arr) {
+				        temp_array.push(arr[index]);
+				    }
+				    //取出的数值项,保存在此数组
+				    var return_array = new Array();
+				    for (var i = 0; i<num; i++) {
+				        //判断如果数组还有可以取出的元素,以防下标越界
+				        if (temp_array.length>0) {
+				            //在数组中产生一个随机索引
+				            var arrIndex = Math.floor(Math.random()*temp_array.length);
+				            //将此随机索引的对应的数组元素值复制出来
+				            return_array[i] = temp_array[arrIndex];
+				            //然后删掉此索引的数组元素,这时候temp_array变为新的数组
+				            temp_array.splice(arrIndex, 1);
+				        } else {
+				            //数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
+				            break;
+				        }
+				    }
+				    return return_array;
+				}
+			var interval;
+			$(".submit").click(function(){
+				var status = $(this).data("id");
+				var ints ;
+				if(status == 0){
+
+					if (vue.level_list.type == 1) {
+						layer.msg('奖项已经结束抽取！',{icon:2});
+						// alert('奖项已经结束抽取！');
+						return false;
+					}
+					
+			      		function times(){		
 							var ArrList=vue.list;
-							var res = getArrayItems(ArrList,10);
+							var res = getArrayItems(ArrList,vue.level_list.num);
+							vue.win_list = res;
 							str='';
 							for(o in res){
 								num = parseInt(o)+1;
@@ -92,19 +156,65 @@
 							$(".prizeList").html(str);
 						}
 						interval = setInterval(times,0);
+
 						$(".submit").data("id","1");
 						$(".submit").text("停止");
-		            
-		        
-		    
-		}else{
-			clearInterval(interval);
-			$(".submit").data("id","0");
-			$(".submit").text("开始");
-		}
-	})
+				            			    
+				}else{
+					clearInterval(interval);
+					$(".submit").data("id","0");
+					$(".submit").text("开始");
+					var url = host+router.saveWinNList;
+					$.post(url,{id:vue.id,list:vue.win_list},function(result){
+						console.log(result);
+						var code = result.code;
+						var data = result.data;
+						level_detail();
+						if (code==200) {
+							// 抽取结束
+						} else {
+							layer.msg(data,{icon:1});
+						}
+					},'json')
+				}
+			})
 
-</script>
+			// 返回
+			$('.history .back_index').click(function(){
+				window.location.href = web_index;
+			});			
+
+			// 重新抽奖
+			$('.history .reset_win').click(function(){
+				console.log(vue.level_list.type);
+				if (vue.level_list.type == 1) {
+					//询问框
+					layer.confirm('确认上次中奖结果无效，该奖项重新抽取？', {
+					  btn: ['确认','取消'] //按钮
+					}, function(){
+					  var url = host+router.ReWinNList;
+					  $.post(url,{id:vue.id},function(result){
+					  		var code = result.code;
+					  		var data = result.data;
+					  		if (code == 200) {
+								user_list();
+								level_detail();
+					  			layer.msg(data,{icon:1});	
+					  		} else {
+					  			layer.msg(data,{icon:2});	
+					  		}
+					  },'json');
+					}, function(){
+					  
+					});
+					
+				} else {
+					layer.msg('该奖项还未开始抽取！',{icon:2});	
+				}
+			});
+
+		</script>
 
 
-</body></html>
+	</body>
+</html>
