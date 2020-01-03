@@ -159,7 +159,7 @@
 							str='';
 							for(o in res){
 								num = parseInt(o)+1;
-								str+='<li data-id="'+res[o].id+'">'+num+'、<span>'+res[o].name+'</span></li>';
+								str+='<li data-id="'+res[o].id+'">'+num+'、<span>'+res[o].type+':</span><span>'+res[o].name+'</span></li>';
 							}
 							$(".prizeList").html(str);
 						}
