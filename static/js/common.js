@@ -2,7 +2,7 @@
 var host = 'http://tp5.peipeiyu.com/api.php/chitu/';//正式
 
 // var web_host = 'http://ct.win.com/';
-var web_host = 'http://chitu.topyun.com/';
+var web_host = 'http://chitu.topyun.top/';
 
 var router = {
 	"index":"index",//首页等级列表
