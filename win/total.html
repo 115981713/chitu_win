@@ -58,7 +58,7 @@
 	<div class="win_list" v-for="(value,name) in list" :key="name">
 		<div class="win_level" >{{name}}</div>
 		<ul class="prizeList">
-			<li data-id="10" v-for="(item,index) in value" :key="item.id">{{index+1}}、<span>{{item.type}}</span>:<span>{{item.name}}</span></li>
+			<li data-id="10" v-for="(item,index) in value" :key="item.id">{{index+1}}、<span>{{item.type}}</span>&nbsp;:&nbsp;&nbsp;<span>{{item.name}}</span></li>
 		</ul>
 	</div>
 </div>
