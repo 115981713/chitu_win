@@ -171,7 +171,7 @@
 							str='';
 							for(o in res){
 								num = parseInt(o)+1;
-								str+='<li data-id="'+res[o].id+'">'+num+'、<span>'+res[o].type+'&nbsp;:&nbsp;&nbsp;</span><span>'+res[o].name+'</span></li>';
+								str+='<li data-id="'+res[o].id+'">'+num+'、<span>'+res[o].type+'&nbsp;:&nbsp;&nbsp;</span><span>'+res[o].name+'</span><label>'+res[o].company+'</label></li>';
 							}
 							$(".prizeList").html(str);
 						}
@@ -191,7 +191,7 @@
 						str='';
 						for(o in res_staff){
 							num = parseInt(o)+1;
-							str+='<li data-id="'+res_staff[o].id+'">'+num+'、<span>'+res_staff[o].type+'&nbsp;:&nbsp;&nbsp;</span><span>'+res_staff[o].name+'</span></li>';
+							str+='<li data-id="'+res_staff[o].id+'">'+num+'、<span>'+res_staff[o].type+'&nbsp;:&nbsp;&nbsp;</span><span>'+res_staff[o].name+'</span><label>'+res_staff[o].company+'</label></li>';
 						}
 						$(".prizeList").html(str);
 					}	else if (vue.level_list.is_all == 3) {
@@ -202,7 +202,7 @@
 						str='';
 						for(o in res_staff){
 							num = parseInt(o)+1;
-							str+='<li data-id="'+res_staff[o].id+'">'+num+'、<span>'+res_staff[o].type+'&nbsp;:&nbsp;&nbsp;</span><span>'+res_staff[o].name+'</span></li>';
+							str+='<li data-id="'+res_staff[o].id+'">'+num+'、<span>'+res_staff[o].type+'&nbsp;:&nbsp;&nbsp;</span><span>'+res_staff[o].name+'</span><label>'+res_staff[o].company+'</label></li>';
 						}
 						$(".prizeList").html(str);
 					}				
