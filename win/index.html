@@ -35,6 +35,9 @@
 			.prizeList li{
 				font-size:45px;
 			}
+			.center_class{
+
+			}
 		</style>
 	</head>
 	<body style="" >
@@ -71,8 +74,10 @@
 			    flag:false,
 			    id:'',
 			    list:[],
+			    list_staff:[],
 			    level_list:[],
-			    win_list:[]
+			    win_list:[],
+			    center_classs:false
 			  },
 			  methods:{
 			  	
@@ -91,12 +96,15 @@
 			// 未抽奖人员
 			function user_list(){
 				var url = host+router.noWinList;
-				$.get(url,function(result){
+				$.post(url,{id:vue.id},function(result){
 					var data = JSON.parse(result);
 					vue.list = data.data;
+					vue.list_staff = data.msg;
+					console.log(data);
 					console.log(vue.list.length);
 
 					console.log(vue.list);
+					console.log(vue.list_staff);
 				});
 			}
 
@@ -136,7 +144,8 @@
 				        }
 				    }
 				    return return_array;
-				}
+				}		
+
 			var interval;
 			$(".submit").click(function(){
 				var status = $(this).data("id");
@@ -155,7 +164,12 @@
 			      		function times(){		
 							var ArrList=vue.list;
 							var res = getArrayItems(ArrList,vue.level_list.num);
+							
 							vue.win_list = res;
+							// var center_class = '';
+							// if (vue.level_list.num <= 2) {
+							// 	var center_class = 'center_class';
+							// }
 							str='';
 							for(o in res){
 								num = parseInt(o)+1;
@@ -167,8 +181,23 @@
 
 						$(".submit").data("id","1");
 						$(".submit").text("停止");
+
+
 				            			    
 				}else{
+					if (vue.level_list.is_all == 2) {
+						var ArrList=vue.list_staff;
+						var res_staff = getArrayItems(ArrList,vue.level_list.num);
+						vue.win_list = res_staff;
+						console.log(vue.win_list);
+						str='';
+						for(o in res_staff){
+							num = parseInt(o)+1;
+							str+='<li data-id="'+res_staff[o].id+'">'+num+'、<span>'+res_staff[o].type+'&nbsp;:&nbsp;&nbsp;</span><span>'+res_staff[o].name+'</span></li>';
+						}
+						$(".prizeList").html(str);
+					}
+
 					clearInterval(interval);
 					$(".submit").data("id","0");
 					$(".submit").text("开始");
@@ -185,6 +214,10 @@
 							layer.msg(data,{icon:1});
 						}
 					},'json')
+				}
+
+				if (vue.level_list.num <= 2) {
+					$('.prizeList').css({"display":"flex","justify-content":"center"});
 				}
 			})
 
