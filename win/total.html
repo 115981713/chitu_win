@@ -70,10 +70,10 @@
 <script type="text/javascript">
 	var vue = new Vue({
 		el: '#box',
-		created(){
+		created:function(){
 			this.id = GetQueryString('id') ? GetQueryString('id') : '';
 		},
-		mounted(){
+		mounted:function(){
 			is_login();
 		},
 		data: {
